@@ -15,13 +15,12 @@
             --bg-color: #ffffff;
             --y2k-green: #bce73c; /* Exact Retro Lime Chartreuse from mockups */
             --y2k-black: #000000;
-            --card-shadow: 4px 4px 0px #000000;
-            --btn-shadow: 3px 3px 0px #000000;
+            --y2k-shadow: 5px 5px 0px #000000;
         }
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
+            background-color: #ffffff; /* Clean flat white background canvas */
             color: var(--y2k-black);
             display: flex;
             justify-content: center;
@@ -30,7 +29,6 @@
             padding: 12px;
         }
         
-        /* Allow scroll capture safeties on desktop viewports */
         @media (min-width: 768px) {
             body {
                 overflow: hidden; 
@@ -38,32 +36,25 @@
             }
         }
 
-        /* Y2K Container Frame - Responsive scaling optimization */
+        /* Seamless layout container without outer framing lines */
         .app-window {
             width: 100%;
-            max-width: 640px; /* Scaled larger for pristine desktop presence */
+            max-width: 640px;
             background-color: var(--bg-color);
-            border: 3px solid var(--y2k-black); /* Bolder line weights */
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden;
-            box-shadow: 6px 6px 0px rgba(0,0,0,0.06);
         }
 
-        /* Y2K Columbia Branded Header */
+        /* Clean borderless brand header */
         .app-header {
             background-color: var(--bg-color);
-            padding: 20px;
+            padding: 20px 20px 10px 20px;
             text-align: center;
-            border-bottom: 3px solid var(--y2k-black);
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 12px;
-            font-weight: bold;
-            font-size: 18px;
-            letter-spacing: 1px;
             z-index: 10;
         }
 
@@ -75,18 +66,26 @@
             display: block;
         }
 
-        /* Progress Tracker Bar */
+        /* Progress Bar with clean thick lines */
         .progress-container {
-            padding: 24px 32px 0 32px;
+            padding: 16px 32px 0 32px;
             width: 100%;
             display: flex;
             justify-content: center;
+            position: relative;
             z-index: 10;
+        }
+        .progress-container::before {
+            content: '✦';
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            font-size: 24px;
         }
         .progress-bar {
             width: 100%;
             max-width: 380px;
-            height: 18px;
+            height: 22px;
             border: 3px solid var(--y2k-black);
             background-color: #ffffff;
             position: relative;
@@ -98,13 +97,13 @@
             transition: width 0.3s ease;
         }
 
-        /* Survey Content Viewport - Dynamically proportions based on screen size */
+        /* Survey Content Viewport */
         .app-body {
             padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            min-height: 460px;
+            gap: 24px;
+            min-height: 480px;
             height: auto;
             align-items: center;
             position: relative;
@@ -112,7 +111,7 @@
         
         @media (min-width: 768px) {
             .app-body {
-                min-height: 520px;
+                min-height: 540px;
                 padding: 32px;
             }
         }
@@ -122,7 +121,7 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 24px;
             align-items: center;
             animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
@@ -149,40 +148,40 @@
             40%, 80% { transform: translateY(4px); }
         }
 
-        /* Lime-Green Display Box */
+        /* RESTORED: Thick-bordered, offset-shadow Display Card */
         .display-card {
             background-color: var(--y2k-green);
             border: 3px solid var(--y2k-black);
-            border-radius: 24px;
-            padding: 24px;
+            border-radius: 36px;
+            padding: 28px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
             line-height: 1.6;
             text-align: center;
             position: relative;
             width: 100%;
-            margin-bottom: 5px;
-            box-shadow: 1px 2px 0px rgba(0,0,0,0.05);
+            box-shadow: var(--y2k-shadow);
         }
-        /* Y2K Graphic Sparkles */
+        
+        /* Graphic Sparkles surrounding main question box */
         .display-card::before {
             content: '✦';
             position: absolute;
-            left: -14px;
-            bottom: -14px;
-            font-size: 26px;
+            left: -20px;
+            bottom: -20px;
+            font-size: 28px;
             color: var(--y2k-black);
         }
         .display-card::after {
             content: '✦';
             position: absolute;
-            right: -14px;
-            top: -14px;
-            font-size: 26px;
+            right: -25px;
+            top: -25px;
+            font-size: 32px;
             color: var(--y2k-black);
         }
 
-        /* Input Workspace */
+        /* Workspace setup */
         .interactive-area {
             display: flex;
             flex-direction: column;
@@ -191,23 +190,27 @@
             align-items: center;
         }
 
+        /* Form text inputs with bold lines */
         .text-input {
             width: 100%;
-            padding: 14px 20px;
+            padding: 16px 24px;
             font-family: inherit;
             font-size: 16px;
+            font-weight: bold;
             border: 3px solid var(--y2k-black);
-            border-radius: 28px;
+            border-radius: 32px;
             background-color: #ffffff;
+            box-shadow: 3px 3px 0px #000;
             outline: none;
         }
 
-        /* Y2K Retro Custom Buttons */
+        /* RESTORED: Rectangular action buttons matching 'Click for examples' style */
         .y2k-btn {
             background-color: var(--y2k-green);
             color: var(--y2k-black);
             border: 3px solid var(--y2k-black);
-            padding: 12px 24px;
+            box-shadow: var(--y2k-shadow);
+            padding: 12px 28px;
             font-family: inherit;
             font-weight: bold;
             font-size: 16px;
@@ -216,89 +219,75 @@
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            transition: transform 0.1s ease;
         }
         .y2k-btn:active {
-            transform: translate(1px, 1px);
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
         }
         
+        /* Submit / Continue layout button sizing overrides */
         .action-btn {
-            border-radius: 28px;
+            border-radius: 32px;
             width: 100%;
-            padding: 14px;
+            padding: 16px;
+        }
+
+        /* Trigger Button Styles (Examples / Stuck Blocks) */
+        .trigger-btn {
+            padding: 12px 24px;
             font-size: 16px;
         }
-
-        /* Trigger Button Styles (Examples / Stuck Buttons) */
-        .trigger-btn {
-            padding: 10px 20px;
-            font-size: 14px;
-            border-radius: 6px;
-            box-shadow: var(--btn-shadow);
-            position: relative;
-            margin-bottom: 4px;
-        }
-        .trigger-btn::before {
-            content: '✦';
-            position: absolute;
-            left: -18px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-        }
-        .trigger-btn::after {
-            content: '✦';
-            position: absolute;
-            right: -18px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-        }
-
-        /* Checkbox & Selection Lists */
+        
+        /* Checkbox & Selection Options Row Layout */
         .option-row {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             width: 100%;
             cursor: pointer;
+            position: relative;
         }
         
+        /* RESTORED: Round pill shapes with thick borders and right-aligned stars */
         .option-pill {
             flex: 1;
             background-color: var(--y2k-green);
             border: 3px solid var(--y2k-black);
-            border-radius: 28px;
-            padding: 12px 20px;
+            border-radius: 32px;
+            padding: 14px 24px;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 16px;
             position: relative;
             text-align: center;
+            box-shadow: 3px 3px 0px #000;
         }
-        .option-pill::after {
+        
+        /* Right alignment sparkle anchor tag */
+        .option-row::after {
             content: '✦';
             position: absolute;
-            right: 16px;
+            right: -24px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 13px;
+            font-size: 28px;
+            color: var(--y2k-black);
         }
 
+        /* RESTORED: Hard-edge styled checkboxes */
         .retro-square-checkbox {
-            width: 26px;
-            height: 26px;
+            width: 32px;
+            height: 32px;
             border: 3px solid var(--y2k-black);
             background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 20px;
             font-weight: bold;
             flex-shrink: 0;
-            box-shadow: 2px 2px 0px #000;
+            box-shadow: 3px 3px 0px #000;
         }
         
-        /* Checkbox states matching mockup graphics */
         .option-row.selected .retro-square-checkbox {
             background-color: var(--y2k-green);
         }
@@ -310,13 +299,13 @@
         .custom-other-container {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
             width: 100%;
             margin-top: 4px;
         }
         .custom-other-container .text-input {
-            width: calc(100% - 40px);
-            margin-left: 40px;
+            width: calc(100% - 48px);
+            margin-left: 48px;
         }
 
         /* Custom Piped Variable Text Highlighting */
@@ -326,14 +315,13 @@
             text-transform: uppercase;
             text-decoration: underline;
             padding: 0 4px;
-            background-color: rgba(255,255,255,0.4);
         }
 
-        /* Pop-up Window System */
+        /* Pop-up Dialog System - Retains thick borders */
         .popup-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.35);
+            background: rgba(0,0,0,0.4);
             display: none;
             justify-content: center;
             align-items: center;
@@ -347,12 +335,12 @@
             max-width: 480px;
             display: flex;
             flex-direction: column;
-            box-shadow: var(--card-shadow);
+            box-shadow: var(--y2k-shadow);
         }
         .popup-header {
             background: var(--y2k-green);
             border-bottom: 3px solid var(--y2k-black);
-            padding: 12px 16px;
+            padding: 14px 20px;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
@@ -367,7 +355,7 @@
             background: #ffffff;
         }
         .popup-body {
-            padding: 20px;
+            padding: 24px;
             font-size: 15px;
             max-height: 380px;
             overflow-y: auto;
@@ -380,24 +368,31 @@
         .popup-body li {
             margin-bottom: 8px;
         }
+        .popup-body img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-top: 12px;
+            border: 3px solid var(--y2k-black);
+        }
 
         .options-scroll-box {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            max-height: 280px;
+            gap: 14px;
+            max-height: 320px;
             overflow-y: auto;
             width: 100%;
-            padding-right: 4px;
+            padding: 4px 28px 4px 4px;
         }
     </style>
 </head>
 <body>
 
 <div class="app-window">
-<div class="app-header">
-    <img src="Columbia_University_Logo-black.png" alt="Columbia University" class="header-logo">
-</div>
+    <div class="app-header">
+        <img src="Columbia_University_Logo-black.png" alt="Columbia University" class="header-logo">
+    </div>
 
     <div class="progress-container">
         <div class="progress-bar">
@@ -428,7 +423,7 @@
         { 
             type: "info", 
             text: "Values are the things that are most important and meaningful to you. When you aren't engaging with your values, you can feel unfullfilled 😔.\n\nThe first step in living a more fulfilling life is understanding your values and how to engage with them.",
-            btnText: "CNext"
+            btnText: "Next"
         },
         { 
             id: "q1_fulfilled_time", 
@@ -451,7 +446,7 @@
 <p style="margin-bottom: 16px;">Think about other memories, activities, or goals that made you feel a similar way.</p>
 <p style="margin-bottom: 16px;">Often, these thoughts can be represented by visuals. Putting these images together, you can create a vision board to help you explore your values. Here's an example of a vision board made by someone who values adventure and exploration.</p>
 <p style="margin-bottom: 16px;">Think about what you would put on your vision board!</p>
-<img src="VisionBoard.png" alt="Vision Board Example" style="width: 100%; height: auto; border: 3px solid var(--y2k-black); display: block; margin-top: 8px;" />`
+<img src="VisionBoard.png" alt="Vision Board Example" />`
         },
         { 
             id: "q3_select_values",
@@ -497,7 +492,6 @@
         q3_select_values: []
     };
 
-    // Scroll throttle tracker to prevent multi-triggering
     let isTransitioning = false; 
 
     const appBody = document.getElementById('appBody');
@@ -521,7 +515,6 @@
         }
     }
 
-    // Handles the validation logic and executes a bounce if criteria isn't met
     function triggerAdvanceAttempt() {
         if (currentStep >= surveyData.length) return;
         
@@ -541,7 +534,6 @@
                 isValid = false;
             }
         } else if (node.type === 'mcq') {
-            // MCQ auto-advances on click, but if they try to scroll past without selection
             if (!userAnswers[node.id]) {
                 isValid = false;
             }
@@ -559,7 +551,6 @@
         const container = appBody.querySelector('.slide-container');
         if (container && !container.classList.contains('bounce-error')) {
             container.classList.add('bounce-error');
-            // Remove class after animation ends to allow re-triggering
             setTimeout(() => {
                 container.classList.remove('bounce-error');
             }, 400);
@@ -581,8 +572,6 @@
         }
 
         const node = surveyData[currentStep];
-        
-        // Wrap elements inside an animated slide container
         const slideContainer = document.createElement('div');
         slideContainer.classList.add('slide-container');
         
@@ -593,7 +582,6 @@
             const placementVal = userAnswers["q4_focus_value"] || "your value";
             const pieces = node.text.split("[Q4 answer]");
             
-            // Build elements using innerHTML to safely render formatting tags
             displayCard.innerHTML = pieces[0];
             
             const span = document.createElement('span');
@@ -632,7 +620,6 @@
             input.type = node.isEmail ? "email" : "text";
             input.classList.add('text-input');
             input.placeholder = "Type here...";
-            // Re-populate if user came back or had typed something
             if (userAnswers[node.id]) input.value = userAnswers[node.id];
             area.appendChild(input);
 
@@ -783,32 +770,26 @@
         appBody.appendChild(slideContainer);
     }
 
-    /* --- Scroll & Touch Gesture Capture Logic --- */
-    
-    // Checks if the user is scrolling inside a sub-scrollable area (like the option boxes or popup)
     function isInsideScrollableTarget(target) {
         return target.closest('.options-scroll-box') || target.closest('.popup-body');
     }
 
     function handleScrollAction(deltaY, target) {
-        // Safe check: If popup is active or user is scrolling through internal menu options, don't flip pages
         if (popupOverlay.style.display === 'flex' || isInsideScrollableTarget(target) || isTransitioning) {
             return;
         }
 
-        if (deltaY > 25) { // Downward scroll threshold met
+        if (deltaY > 25) { 
             isTransitioning = true;
             triggerAdvanceAttempt();
-            setTimeout(() => { isTransitioning = false; }, 600); // Throttles input triggers
+            setTimeout(() => { isTransitioning = false; }, 600); 
         }
     }
 
-    // Desktop/Mouse Wheel Event Listener
     window.addEventListener('wheel', (e) => {
         handleScrollAction(e.deltaY, e.target);
     }, { passive: true });
 
-    // Mobile/Touch Swipe Tracker Variables
     let touchStartY = 0;
     window.addEventListener('touchstart', (e) => {
         touchStartY = e.touches[0].clientY;
@@ -816,7 +797,7 @@
 
     window.addEventListener('touchend', (e) => {
         const touchEndY = e.changedTouches[0].clientY;
-        const totalSwipeDistance = touchStartY - touchEndY; // Positive equals swiping up (moving page down)
+        const totalSwipeDistance = touchStartY - touchEndY; 
         handleScrollAction(totalSwipeDistance, e.target);
     }, { passive: true });
 
