@@ -348,7 +348,7 @@
         .popup-body {
             padding: 14px;
             font-size: 13px;
-            max-height: 240px;
+            max-height: 340px; /* Expanded slightly to account for the image */
             overflow-y: auto;
             line-height: 1.4;
         }
@@ -402,12 +402,12 @@
         { 
             type: "info", 
             text: "Welcome to Values: A more fulfilled life 🤗\n\nThis activity will help you explore your values and discover how you can live a life that reflects them.\n\nWhen you're ready to get started, click the next arrow!",
-            btnText: "Start"
+            btnText: "Next"
         },
         { 
             type: "info", 
             text: "Values are the things that are most important and meaningful to you. When you aren't engaging with your values, you can feel unfullfilled 😔.\n\nThe first step in living a more fulfilling life is understanding your values and how to engage with them.",
-            btnText: "Continue"
+            btnText: "Next"
         },
         { 
             id: "q1_fulfilled_time", 
@@ -426,7 +426,11 @@
             examplesText: "<p><strong>When I scored a goal:</strong></p><ul><li>I felt really proud of myself because I had to work really hard to be able to score the goal</li><li>It felt really amazing to be there for my teammates and have their support</li></ul><p><strong>When I got an A:</strong></p><ul><li>I was really happy because I had put in a lot of time and got extra help from my teacher</li><li>I enjoyed showing that I'd learned the material</li></ul>",
             hasStuckNotice: true,
             stuckTitle: "Still feeling stuck?",
-            stuckText: "<p>Reflect on how the memory you described made you feel.</p>\n<p>Think about other memories, activities, or goals that made you feel a similar way.</p>\n<p>Often, these thoughts can be represented by visuals. Putting these images together, you can create a vision board to help you explore your values. Here's an example of a vision board made by someone who values adventure and exploration.</p>\n<p>Think about what you would put on your vision board!</p>"
+            stuckText: `<p style="margin-bottom: 16px;">Reflect on how the memory you described made you feel.</p>
+<p style="margin-bottom: 16px;">Think about other memories, activities, or goals that made you feel a similar way.</p>
+<p style="margin-bottom: 16px;">Often, these thoughts can be represented by visuals. Putting these images together, you can create a vision board to help you explore your values. Here's an example of a vision board made by someone who values adventure and exploration.</p>
+<p style="margin-bottom: 16px;">Think about what you would put on your vision board!</p>
+<img src="VisionBoard.png" alt="Vision Board Example" style="width: 100%; height: auto; border: 2px solid var(--y2k-black); display: block; margin-top: 8px;" />`
         },
         { 
             id: "q3_select_values",
