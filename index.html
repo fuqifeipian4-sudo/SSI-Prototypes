@@ -348,7 +348,7 @@
         .popup-body {
             padding: 14px;
             font-size: 13px;
-            max-height: 340px; /* Expanded slightly to account for the image */
+            max-height: 340px;
             overflow-y: auto;
             line-height: 1.4;
         }
@@ -407,7 +407,7 @@
         { 
             type: "info", 
             text: "Values are the things that are most important and meaningful to you. When you aren't engaging with your values, you can feel unfullfilled 😔.\n\nThe first step in living a more fulfilling life is understanding your values and how to engage with them.",
-            btnText: "Next"
+            btnText: "CNext"
         },
         { 
             id: "q1_fulfilled_time", 
@@ -458,7 +458,7 @@
         { 
             id: "q6_first_step", 
             type: "input", 
-            text: "Sometimes, seeing the type of life you want but feeling far from it can be discouraging. It's normal to feel that way! Even though you can't magically get there, you can start with finding realistic, value-based activities to do regularly.\n\nWhat's a first step that you can do today to add more [Q4 answer] to your life?",
+            text: "Sometimes, seeing the type of life you want but feeling far from it can be discouraging. It's normal to feel that way! Even though you can't magically get there, you can start with finding realistic, value-based activities to do regularly.<br><br>What's a first step that you can do today to add more [Q4 answer] to your life?",
             hasExamples: true,
             examplesTitle: "Examples",
             examplesText: "<ul><li>Watch or share funny videos with friends and others</li><li>Plan a fun activity with others</li><li>Look for a new hobby to participate in</li></ul>"
@@ -571,16 +571,20 @@
         if (node.text.includes("[Q4 answer]")) {
             const placementVal = userAnswers["q4_focus_value"] || "your value";
             const pieces = node.text.split("[Q4 answer]");
-            displayCard.appendChild(document.createTextNode(pieces[0]));
+            
+            // Build elements using innerHTML to safely render formatting tags
+            displayCard.innerHTML = pieces[0];
             
             const span = document.createElement('span');
             span.classList.add('piped-variable');
             span.innerText = placementVal;
             displayCard.appendChild(span);
             
-            displayCard.appendChild(document.createTextNode(pieces[1]));
+            const remainingText = document.createElement('span');
+            remainingText.innerHTML = pieces[1];
+            displayCard.appendChild(remainingText);
         } else {
-            displayCard.innerText = node.text;
+            displayCard.innerHTML = node.text.replace(/\n/g, '<br>');
         }
         slideContainer.appendChild(displayCard);
 
