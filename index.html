@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Columbia Values Survey</title>
+    <style>
+        /* Retro Y2K Clean Reset & System Variables */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        :root {
+            --bg-color: #ffffff;
+            --y2k-green: #bce73c; /* Exact Retro Lime Chartreuse from mockups */
+            --y2k-black: #000000;
+            --card-shadow: 4px 4px 0px #000000;
+            --btn-shadow: 3px 3px 0px #000000;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: var(--y2k-black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden; /* Prevents the main page from scrolling natively */
+        }
+
+        /* Y2K Container Frame */
+        .app-window {
+            width: 100%;
+            max-width: 460px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--y2k-black);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Y2K Columbia Branded Header */
+        .app-header {
+            background-color: var(--bg-color);
+            padding: 16px;
+            text-align: center;
+            border-bottom: 2px solid var(--y2k-black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            letter-spacing: 1px;
+            z-index: 10;
+        }
+
+        .header-logo {
+            max-height: 100%;
+            height: 28px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Progress Tracker Bar */
+        .progress-container {
+            padding: 20px 24px 0 24px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 10;
+        }
+        .progress-bar {
+            width: 100%;
+            max-width: 280px;
+            height: 14px;
+            border: 2px solid var(--y2k-black);
+            background-color: #ffffff;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 8%;
+            background-color: var(--y2k-black);
+            transition: width 0.3s ease;
+        }
+
+        /* Survey Content Viewport */
+        .app-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 440px;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Continuous Slide-up Wrapper */
+        .slide-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Bounce Back Animation for Invalid Navigation Attempts */
+        .bounce-error {
+            animation: bounceBack 0.4s ease-in-out;
+        }
+
+        @keyframes bounceBack {
+            0%, 100% { transform: translateY(0); }
+            20%, 60% { transform: translateY(-8px); }
+            40%, 80% { transform: translateY(4px); }
+        }
+
+        /* Lime-Green Display Box */
+        .display-card {
+            background-color: var(--y2k-green);
+            border: 2px solid var(--y2k-black);
+            border-radius: 20px;
+            padding: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: center;
+            position: relative;
+            width: 100%;
+            margin-bottom: 5px;
+            box-shadow: 1px 2px 0px rgba(0,0,0,0.05);
+        }
+        /* Y2K Graphic Sparkles */
+        .display-card::before {
+            content: '✦';
+            position: absolute;
+            left: -12px;
+            bottom: -12px;
+            font-size: 22px;
+            color: var(--y2k-black);
+        }
+        .display-card::after {
+            content: '✦';
+            position: absolute;
+            right: -12px;
+            top: -12px;
+            font-size: 22px;
+            color: var(--y2k-black);
+        }
+
+        /* Input Workspace */
+        .interactive-area {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 14px;
+            border: 2px solid var(--y2k-black);
+            border-radius: 24px; /* Pill shape matching mockup text fields */
+            background-color: #ffffff;
+            outline: none;
+        }
+
+        /* Y2K Retro Custom Buttons */
+        .y2k-btn {
+            background-color: var(--y2k-green);
+            color: var(--y2k-black);
+            border: 2px solid var(--y2k-black);
+            padding: 10px 20px;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .action-btn {
+            border-radius: 24px;
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+        }
+
+        /* Trigger Button Styles (Examples / Stuck Buttons) */
+        .trigger-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: var(--btn-shadow);
+            position: relative;
+            margin-bottom: 4px;
+        }
+        .trigger-btn::before {
+            content: '✦';
+            position: absolute;
+            left: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+        }
+        .trigger-btn::after {
+            content: '✦';
+            position: absolute;
+            right: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+        }
+
+        /* Checkbox & Selection Lists */
+        .option-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .option-pill {
+            flex: 1;
+            background-color: var(--y2k-green);
+            border: 2px solid var(--y2k-black);
+            border-radius: 24px;
+            padding: 10px 18px;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+            text-align: center;
+        }
+        .option-pill::after {
+            content: '✦';
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+        }
+
+        .retro-square-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--y2k-black);
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 1px 1px 0px #000;
+        }
+        
+        /* Checkbox states matching mockup graphics */
+        .option-row.selected .retro-square-checkbox {
+            background-color: var(--y2k-green);
+        }
+        .option-row.selected .retro-square-checkbox::after {
+            content: '✓';
+        }
+
+        /* Specialty Custom Other Layout Container Block */
+        .custom-other-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            margin-top: 4px;
+        }
+        .custom-other-container .text-input {
+            width: calc(100% - 34px);
+            margin-left: 34px;
+        }
+
+        /* Custom Piped Variable Text Highlighting */
+        .piped-variable {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: underline;
+            padding: 0 2px;
+        }
+
+        /* Pop-up Window System */
+        .popup-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.35);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 200;
+        }
+        .popup-window {
+            background: #ffffff;
+            border: 2px solid var(--y2k-black);
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--card-shadow);
+        }
+        .popup-header {
+            background: var(--y2k-green);
+            border-bottom: 2px solid var(--y2k-black);
+            padding: 8px 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        .popup-close {
+            cursor: pointer;
+            font-weight: bold;
+            border: 1px solid #000;
+            padding: 1px 5px;
+            background: #ffffff;
+        }
+        .popup-body {
+            padding: 14px;
+            font-size: 13px;
+            max-height: 240px;
+            overflow-y: auto;
+            line-height: 1.4;
+        }
+        .popup-body ul {
+            padding-left: 16px;
+            margin-top: 4px;
+        }
+        .popup-body li {
+            margin-bottom: 6px;
+        }
+
+        .options-scroll-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 260px;
+            overflow-y: auto;
+            width: 100%;
+            padding-right: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-window">
+    <div class="app-header">
+        <img src="SSI Assets/Columbia_University_Logo-black.png" alt="Columbia University" class="header-logo">
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="app-body" id="appBody"></div>
+
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-window">
+            <div class="popup-header">
+                <span id="popupTitle">Examples</span>
+                <span class="popup-close" onclick="togglePopup(false)">X</span>
+            </div>
+            <div class="popup-body" id="popupContent"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const surveyData = [
+        { 
+            type: "info", 
+            text: "Welcome to Values: A more fulfilled life 🤗\n\nThis activity will help you explore your values and discover how you can live a life that reflects them.\n\nWhen you're ready to get started, click the next arrow!",
+            btnText: "Start"
+        },
+        { 
+            type: "info", 
+            text: "Values are the things that are most important and meaningful to you. When you aren't engaging with your values, you can feel unfullfilled 😔.\n\nThe first step in living a more fulfilling life is understanding your values and how to engage with them.",
+            btnText: "Continue"
+        },
+        { 
+            id: "q1_fulfilled_time", 
+            type: "input", 
+            text: "To help identify your values, let's look back on a time where you might have been engaging in them. Describe a time you felt happy, proud, or fulfilled:",
+            hasExamples: true,
+            examplesTitle: "Examples",
+            examplesText: "<ul><li>Last week, I scored a goal in my soccer game for the first time this season. The whole team cheered!</li><li>I got an A on an exam after studying really hard</li></ul>"
+        },
+        { 
+            id: "q2_positive_reason", 
+            type: "input", 
+            text: "What made this moment feel so positive?",
+            hasExamples: true,
+            examplesTitle: "Examples",
+            examplesText: "<p><strong>When I scored a goal:</strong></p><ul><li>I felt really proud of myself because I had to work really hard to be able to score the goal</li><li>It felt really amazing to be there for my teammates and have their support</li></ul><p><strong>When I got an A:</strong></p><ul><li>I was really happy because I had put in a lot of time and got extra help from my teacher</li><li>I enjoyed showing that I'd learned the material</li></ul>",
+            hasStuckNotice: true,
+            stuckTitle: "Still feeling stuck?",
+            stuckText: "<p>Reflect on how the memory you described made you feel.</p>\n<p>Think about other memories, activities, or goals that made you feel a similar way.</p>\n<p>Often, these thoughts can be represented by visuals. Putting these images together, you can create a vision board to help you explore your values. Here's an example of a vision board made by someone who values adventure and exploration.</p>\n<p>Think about what you would put on your vision board!</p>"
+        },
+        { 
+            id: "q3_select_values",
+            type: "check_all", 
+            text: "Looking at the bigger picture, what are the values related to why this memory made you feel so positive?\n\nThere are no \"right\" or \"wrong\" answers. Select ALL the values that are meaningful to you from this memory and any others 😊",
+            options: [
+                "Adventure and Exploration", "Challenge and Growth", "Creativity and Expression", 
+                "Independence and Strength", "Knowledge and Curiosity", "Justice and Kindness", 
+                "Love and Connection", "Wealth and Career", "Friendship and Community", 
+                "Spirituality and Religion", "Tradition and Culture", "Responsibility and Leadership", 
+                "Humor and Fun"
+            ],
+            hasOther: true
+        },
+        { 
+            id: "q4_focus_value", 
+            type: "mcq", 
+            text: "Choose the value you want to focus on right now:"
+        },
+        { 
+            id: "q5_imagined_life", 
+            type: "input", 
+            text: "If you could imagine a life with more [Q4 answer] in it, what would be different?"
+        },
+        { 
+            id: "q6_first_step", 
+            type: "input", 
+            text: "Sometimes, seeing the type of life you want but feeling far from it can be discouraging. It's normal to feel that way! Even though you can't magically get there, you can start with finding realistic, value-based activities to do regularly.\n\nWhat's a first step that you can do today to add more [Q4 answer] to your life?",
+            hasExamples: true,
+            examplesTitle: "Examples",
+            examplesText: "<ul><li>Watch or share funny videos with friends and others</li><li>Plan a fun activity with others</li><li>Look for a new hobby to participate in</li></ul>"
+        },
+        { 
+            id: "q7_email_done", 
+            type: "input", 
+            text: "Congratulations 🎉\n\nYou have identified your values and a first step! Enter your email below to receive a copy of your responses 💌",
+            isEmail: true
+        }
+    ];
+
+    let currentStep = 0;
+    const userAnswers = {
+        q3_select_values: []
+    };
+
+    // Scroll throttle tracker to prevent multi-triggering
+    let isTransitioning = false; 
+
+    const appBody = document.getElementById('appBody');
+    const progressFill = document.getElementById('progressFill');
+    const popupOverlay = document.getElementById('popupOverlay');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupContent = document.getElementById('popupContent');
+
+    function updateProgress() {
+        const percent = ((currentStep) / (surveyData.length - 1)) * 100;
+        progressFill.style.width = `${Math.min(Math.max(percent, 8), 100)}%`;
+    }
+
+    function togglePopup(show, title = "", content = "") {
+        if(show) {
+            popupTitle.innerText = title;
+            popupContent.innerHTML = content;
+            popupOverlay.style.display = 'flex';
+        } else {
+            popupOverlay.style.display = 'none';
+        }
+    }
+
+    // Handles the validation logic and executes a bounce if criteria isn't met
+    function triggerAdvanceAttempt() {
+        if (currentStep >= surveyData.length) return;
+        
+        const node = surveyData[currentStep];
+        let isValid = true;
+
+        if (node.type === 'input') {
+            const currentInput = appBody.querySelector('.text-input');
+            const val = currentInput ? currentInput.value.trim() : "";
+            if (!val) {
+                isValid = false;
+            } else {
+                userAnswers[node.id] = val;
+            }
+        } else if (node.type === 'check_all') {
+            if (userAnswers.q3_select_values.length === 0 && !userAnswers["q3_custom_other"]) {
+                isValid = false;
+            }
+        } else if (node.type === 'mcq') {
+            // MCQ auto-advances on click, but if they try to scroll past without selection
+            if (!userAnswers[node.id]) {
+                isValid = false;
+            }
+        }
+
+        if (isValid) {
+            currentStep++;
+            renderStep();
+        } else {
+            bounceBackFeedback();
+        }
+    }
+
+    function bounceBackFeedback() {
+        const container = appBody.querySelector('.slide-container');
+        if (container && !container.classList.contains('bounce-error')) {
+            container.classList.add('bounce-error');
+            // Remove class after animation ends to allow re-triggering
+            setTimeout(() => {
+                container.classList.remove('bounce-error');
+            }, 400);
+        }
+    }
+
+    function renderStep() {
+        updateProgress();
+        appBody.innerHTML = "";
+
+        if (currentStep >= surveyData.length) {
+            appBody.innerHTML = `
+                <div class="slide-container">
+                    <div class="display-card">All responses saved successfully!</div>
+                    <button class="y2k-btn action-btn" onclick="location.reload()">Restart</button>
+                </div>
+            `;
+            return;
+        }
+
+        const node = surveyData[currentStep];
+        
+        // Wrap elements inside an animated slide container
+        const slideContainer = document.createElement('div');
+        slideContainer.classList.add('slide-container');
+        
+        const displayCard = document.createElement('div');
+        displayCard.classList.add('display-card');
+
+        if (node.text.includes("[Q4 answer]")) {
+            const placementVal = userAnswers["q4_focus_value"] || "your value";
+            const pieces = node.text.split("[Q4 answer]");
+            displayCard.appendChild(document.createTextNode(pieces[0]));
+            
+            const span = document.createElement('span');
+            span.classList.add('piped-variable');
+            span.innerText = placementVal;
+            displayCard.appendChild(span);
+            
+            displayCard.appendChild(document.createTextNode(pieces[1]));
+        } else {
+            displayCard.innerText = node.text;
+        }
+        slideContainer.appendChild(displayCard);
+
+        const area = document.createElement('div');
+        area.classList.add('interactive-area');
+
+        if (node.type === 'info') {
+            const nextBtn = document.createElement('button');
+            nextBtn.classList.add('y2k-btn', 'action-btn');
+            nextBtn.innerText = node.btnText;
+            nextBtn.onclick = triggerAdvanceAttempt;
+            area.appendChild(nextBtn);
+        }
+        else if (node.type === 'input') {
+            if (node.hasExamples) {
+                const exBtn = document.createElement('button');
+                exBtn.classList.add('y2k-btn', 'trigger-btn');
+                exBtn.innerText = "Click for examples";
+                exBtn.onclick = () => togglePopup(true, node.examplesTitle, node.examplesText);
+                area.appendChild(exBtn);
+            }
+
+            const input = document.createElement('input');
+            input.type = node.isEmail ? "email" : "text";
+            input.classList.add('text-input');
+            input.placeholder = "Type here...";
+            // Re-populate if user came back or had typed something
+            if (userAnswers[node.id]) input.value = userAnswers[node.id];
+            area.appendChild(input);
+
+            if (node.hasStuckNotice) {
+                const stuckBtn = document.createElement('button');
+                stuckBtn.classList.add('y2k-btn', 'trigger-btn');
+                stuckBtn.innerText = "Still feeling stuck?";
+                stuckBtn.onclick = () => togglePopup(true, node.stuckTitle, node.stuckText);
+                area.appendChild(stuckBtn);
+            }
+
+            const subBtn = document.createElement('button');
+            subBtn.classList.add('y2k-btn', 'action-btn');
+            subBtn.innerText = "Submit";
+            subBtn.onclick = triggerAdvanceAttempt;
+            area.appendChild(subBtn);
+
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') subBtn.click();
+            });
+            setTimeout(() => input.focus(), 50);
+        }
+        else if (node.type === 'check_all') {
+            const scrollBox = document.createElement('div');
+            scrollBox.classList.add('options-scroll-box');
+
+            node.options.forEach(opt => {
+                const row = document.createElement('div');
+                row.classList.add('option-row');
+                if (userAnswers.q3_select_values.includes(opt)) {
+                    row.classList.add('selected');
+                }
+                
+                const chk = document.createElement('div');
+                chk.classList.add('retro-square-checkbox');
+                
+                const pill = document.createElement('div');
+                pill.classList.add('option-pill');
+                pill.innerText = opt;
+
+                row.onclick = () => {
+                    row.classList.toggle('selected');
+                    const idx = userAnswers.q3_select_values.indexOf(opt);
+                    if (idx > -1) {
+                        userAnswers.q3_select_values.splice(idx, 1);
+                    } else {
+                        userAnswers.q3_select_values.push(opt);
+                    }
+                };
+
+                row.appendChild(chk);
+                row.appendChild(pill);
+                scrollBox.appendChild(row);
+            });
+
+            if (node.hasOther) {
+                const otherContainer = document.createElement('div');
+                otherContainer.classList.add('custom-other-container');
+
+                const row = document.createElement('div');
+                row.classList.add('option-row');
+                if(userAnswers["q3_custom_other"]) {
+                    row.classList.add('selected');
+                }
+
+                const chk = document.createElement('div');
+                chk.classList.add('retro-square-checkbox');
+
+                const pill = document.createElement('div');
+                pill.classList.add('option-pill');
+                pill.innerText = "Other";
+
+                const otherInput = document.createElement('input');
+                otherInput.type = "text";
+                otherInput.classList.add('text-input');
+                otherInput.placeholder = "Type a value here...";
+                if(userAnswers["q3_custom_other"]) otherInput.value = userAnswers["q3_custom_other"];
+
+                row.onclick = () => {
+                    row.classList.toggle('selected');
+                    if(row.classList.contains('selected')) {
+                        userAnswers["q3_custom_other"] = otherInput.value.trim();
+                        setTimeout(() => otherInput.focus(), 50);
+                    } else {
+                        userAnswers["q3_custom_other"] = "";
+                        otherInput.value = "";
+                    }
+                };
+
+                otherInput.oninput = () => {
+                    if(!row.classList.contains('selected')) {
+                        row.classList.add('selected');
+                    }
+                    userAnswers["q3_custom_other"] = otherInput.value.trim();
+                };
+
+                row.appendChild(chk);
+                row.appendChild(pill);
+                otherContainer.appendChild(row);
+                otherContainer.appendChild(otherInput);
+                scrollBox.appendChild(otherContainer);
+            }
+
+            area.appendChild(scrollBox);
+
+            const nextBtn = document.createElement('button');
+            nextBtn.classList.add('y2k-btn', 'action-btn');
+            nextBtn.innerText = "Continue";
+            nextBtn.onclick = triggerAdvanceAttempt;
+            area.appendChild(nextBtn);
+        }
+        else if (node.type === 'mcq') {
+            const scrollBox = document.createElement('div');
+            scrollBox.classList.add('options-scroll-box');
+
+            let list = [...userAnswers.q3_select_values];
+            if(userAnswers["q3_custom_other"]) {
+                list.push(userAnswers["q3_custom_other"]);
+            }
+
+            if(list.length === 0) { list = ["Challenge and Growth", "Humor and Fun"]; }
+
+            list.forEach(opt => {
+                const row = document.createElement('div');
+                row.classList.add('option-row');
+                
+                const chk = document.createElement('div');
+                chk.classList.add('retro-square-checkbox');
+                
+                const pill = document.createElement('div');
+                pill.classList.add('option-pill');
+                pill.innerText = opt;
+
+                row.onclick = () => {
+                    userAnswers[node.id] = opt;
+                    triggerAdvanceAttempt();
+                };
+
+                row.appendChild(chk);
+                row.appendChild(pill);
+                scrollBox.appendChild(row);
+            });
+
+            area.appendChild(scrollBox);
+        }
+
+        slideContainer.appendChild(area);
+        appBody.appendChild(slideContainer);
+    }
+
+    /* --- Scroll & Touch Gesture Capture Logic --- */
+    
+    // Checks if the user is scrolling inside a sub-scrollable area (like the option boxes or popup)
+    function isInsideScrollableTarget(target) {
+        return target.closest('.options-scroll-box') || target.closest('.popup-body');
+    }
+
+    function handleScrollAction(deltaY, target) {
+        // Safe check: If popup is active or user is scrolling through internal menu options, don't flip pages
+        if (popupOverlay.style.display === 'flex' || isInsideScrollableTarget(target) || isTransitioning) {
+            return;
+        }
+
+        if (deltaY > 25) { // Downward scroll threshold met
+            isTransitioning = true;
+            triggerAdvanceAttempt();
+            setTimeout(() => { isTransitioning = false; }, 600); // Throttles input triggers
+        }
+    }
+
+    // Desktop/Mouse Wheel Event Listener
+    window.addEventListener('wheel', (e) => {
+        handleScrollAction(e.deltaY, e.target);
+    }, { passive: true });
+
+    // Mobile/Touch Swipe Tracker Variables
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+        const touchEndY = e.changedTouches[0].clientY;
+        const totalSwipeDistance = touchStartY - touchEndY; // Positive equals swiping up (moving page down)
+        handleScrollAction(totalSwipeDistance, e.target);
+    }, { passive: true });
+
+    renderStep();
+</script>
+
+</body>
+</html>

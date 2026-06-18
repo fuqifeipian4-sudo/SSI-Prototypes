@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Columbia Communication Survey</title>
+    <style>
+        /* Base Reset & Variables */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        :root {
+            --bg-dark: #121212;
+            --chat-bg: #1e1e1e;
+            --header-bg: #0a0a0a;
+            --input-bg: linear-gradient(90deg, #1d4ed8, #2563eb);
+            --bot-gradient: linear-gradient(135deg, #8a4fff 0%, #00c875 100%);
+            --user-blue: #2563eb;
+            --text-main: #ffffff;
+            --text-muted: #b3b3b3;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Mockup Container */
+        .chat-window {
+            width: 100%;
+            max-width: 480px;
+            height: 90vh;
+            background-color: var(--chat-bg);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Header Layout */
+        .chat-header {
+            background-color: var(--header-bg);
+            padding: 18px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #2a2a2a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .header-logo {
+            max-height: 100%;
+            height: 28px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Message Stream */
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            scroll-behavior: smooth;
+        }
+
+        /* Message Bubble Architecture */
+        .msg {
+            max-width: 80%;
+            padding: 12px 16px;
+            font-size: 15px;
+            line-height: 1.45;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg.bot {
+            align-self: flex-start;
+            background: var(--bot-gradient);
+            color: white;
+            border-radius: 18px 18px 18px 4px;
+        }
+
+        .msg.user {
+            align-self: flex-end;
+            background-color: var(--user-blue);
+            color: white;
+            border-radius: 18px 18px 4px 18px;
+        }
+
+        /* Custom Table Layout inside Bot Message */
+        .chat-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .chat-table th, .chat-table td {
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .chat-table th {
+            background-color: rgba(0, 0, 0, 0.3);
+            font-weight: 600;
+        }
+
+        /* Options/MCQ Layout */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+            width: 100%;
+        }
+        .option-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .option-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Script Summary Card Layout */
+        .script-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #00c875;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+        }
+        .script-line {
+            margin-bottom: 6px;
+        }
+        .script-label {
+            font-weight: bold;
+            color: #8a4fff;
+        }
+
+        /* Interactive Footer */
+        .chat-footer {
+            padding: 16px;
+            background-color: var(--header-bg);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 30px;
+            border: none;
+            background: var(--input-bg);
+            color: white;
+            outline: none;
+            font-size: 15px;
+            transition: opacity 0.2s;
+        }
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .chat-input:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: #333;
+        }
+        .chat-input:disabled::placeholder {
+            color: #666;
+        }
+
+        .send-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .send-btn:disabled {
+            background-color: #333;
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        /* Typing Indicator Dynamic Visual */
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: #333;
+            padding: 12px 16px;
+            border-radius: 18px 18px 18px 4px;
+            gap: 4px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-muted);
+            border-radius: 50%;
+            animation: bounce 1.3s infinite ease-in-out;
+        }
+        .dot:nth-child(2) { animation-delay: 0.15s; }
+        .dot:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-6px); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-window">
+    <div class="chat-header">
+        <img src="SSI Assets/Columbia_University_Logo-white.png" alt="Columbia University" class="header-logo">
+    </div>
+    <div class="chat-body" id="chatBody">
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+    <div class="chat-footer">
+        <div class="input-wrapper">
+            <input type="text" id="userInput" class="chat-input" placeholder="Type here..." autocomplete="off" disabled>
+        </div>
+        <button class="send-btn" id="sendBtn" disabled>↑</button>
+    </div>
+</div>
+
+<script>
+    // exact script format mapped from context content
+    const surveyScript = [
+        { type: "statement", text: "👋 Hello" },
+        { type: "statement", text: "This activity has some simple tips to help you communicate better. 💬" },
+        { type: "statement", text: "Using these tips can improve your relationships, stop conversations from turning into arguments, and make you feel better! ✨" },
+        { type: "statement", text: "First, think about someone in your life who makes you upset or sad and would be willing to have a conversation about that. 🤔" },
+        { id: "q1_change", type: "input", text: "What would you like this person to do differently?" },
+        { type: "statement", text: "Well said!" },
+        { type: "statement", text: "If you haven't told them what you want them to change or how you feel, they probably don't know. 🤷" },
+        { type: "statement", text: "You may have to tell them." },
+        { type: "statement", text: "To get you started, here are some tips to help a conversation about this go well! 🚀" },
+        { type: "statement", text: "(Psst, if you answer all the questions, you'll see a personalized conversation script at the end.) 😉" },
+        { type: "statement", text: "Start the conversation with a statement showing you understand how they feel about the situation. ❤️" },
+        { type: "statement", text: "Not sure how they feel? Start the conversation by asking them!" },
+        { id: "q2_empathy", type: "input", text: "What is a statement showing you understand how they feel?" },
+        { type: "statement", text: "Great job! 🌟" },
+        { type: "statement", text: "Next, tell them how you feel about what they do using an \"I\" statement: \"I feel... when you...\" 📝" },
+        { type: "statement", text: "\"I\" statements focus on how you feel, whereas \"you\" statements focus on what they do and can make the other person feel attacked and respond defensively. 🛑" },
+        { type: "table", text: "Here are some examples of how \"you\" statements can be rephrased as \"I\" statements:", 
+          headers: ["\"You\" Statement", "\"I\" Statement"],
+          rows: [
+              ["You're late", "I feel anxious and unimportant when you're late"],
+              ["You often yell at me when you're stressed", "I feel frustrated when you yell"],
+              ["You criticize me a lot", "I feel unsupported when you criticize me"]
+          ]
+        },
+        { id: "q3_i_statement", type: "input", text: "Now, how can you express your feelings as an \"I\" statement? (I feel ___ when you ___.)" },
+        { type: "statement", text: "Perfect! 💎" },
+        { type: "statement", text: "Finally, after saying what you'd like to change, be willing to compromise. 🤝" },
+        { type: "statement", text: "They might not always be able or willing to change exactly how you want." },
+        { type: "statement", text: "Coming into the conversation with multiple solutions in mind increases the chances of finding one that works for everyone. 💡" },
+        { id: "q4_compromise", type: "input", text: "What's something else this person could do differently to make you feel better?" },
+        { type: "statement", text: "You've done it again! 🎉" },
+        { type: "statement", text: "Lastly, have this conversation when you and the other person are calm, not when emotions are running high or someone is tired or stressed. 🧘" },
+        { type: "statement", text: "(If it's hard to find a time like that, you can make an \"appointment\" to have the conversation later.) 📅" },
+        { id: "q5_timing", type: "input", text: "When is a good time to have this conversation?" },
+        { type: "statement", text: "As you tackle conversations like this, remember:\n• Have important conversations when everyone is calm 🕊️\n• Start by saying something that shows you understand how they feel 🫂\n• Express how you feel using an \"I\" statement 🗣️\n• Ask them to do something differently 🔄\n• Be prepared to compromise 🛹\n• You can use these strategies in lots of conversations, not just the one you're focusing on now 🌐" },
+        { id: "q6_feedback", type: "mcq", text: "How likely are you to use these tips? 📊", options: ["Very Likely", "Somewhat Likely", "Unlikely", "Not Sure"] },
+        { id: "q7_barrier", type: "input", text: "What might get in the way of you using these tips?" },
+       { id: "q8_deal", type: "input", text: "If this gets in the way of you using these tips, how could you deal with it? 🚧" },
+        { type: "statement", text: "Sometimes conversations don't go well, even when you use these tips. 🫠" },
+        { type: "statement", text: "Here are some tips for what to do if the conversation doesn't go well:\n• Remind yourself that you should be proud for communicating your feelings 🎖️\n• Reach out to someone for support 📞\n• Tell the other person you'd like some time apart to cool down 🧊\n• Try a quick breathing exercise 💨\n• Go for a walk 🚶\n• Don't give up!" },
+        { type: "statement", text: "It takes time for someone to learn to do something differently. ⏳" },
+        { type: "statement", text: "Be patient, keep trying, and remember that you can control what you do, but not what other people do. 🎯" },
+        { type: "summary", text: "Here's a summary of what you could say and when you could say it: 📋" }
+    ];
+
+    let currentStep = 0;
+    const collectedData = {};
+
+    const chatBody = document.getElementById('chatBody');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function scrollBottom() {
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function showTyping() {
+        chatBody.appendChild(typingIndicator);
+        typingIndicator.style.display = 'flex';
+        scrollBottom();
+    }
+
+    function hideTyping() {
+        typingIndicator.style.display = 'none';
+    }
+
+    function renderBotMessage(node) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('msg', 'bot');
+
+        const cleanText = node.text.replace(/\n/g, '<br>');
+        
+        if (node.type === 'table') {
+            let tableHTML = `<p>${cleanText}</p><table class="chat-table"><tr>`;
+            node.headers.forEach(h => tableHTML += `<th>${h}</th>`);
+            tableHTML += '</tr>';
+            node.rows.forEach(r => {
+                tableHTML += `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`;
+            });
+            tableHTML += '</table>';
+            msgDiv.innerHTML = tableHTML;
+        } else if (node.type === 'mcq') {
+            let mcqHTML = `<p>${cleanText}</p><div class="options-container">`;
+            node.options.forEach(opt => {
+                mcqHTML += `<button class="option-btn" onclick="handleSelectOption('${opt}')">${opt}</button>`;
+            });
+            mcqHTML += `</div>`;
+            msgDiv.innerHTML = mcqHTML;
+        } else if (node.type === 'summary') {
+            let summaryHTML = `<p>${cleanText}</p><div class="script-box">`;
+            summaryHTML += `<div class="script-line"><span class="script-label">When to talk:</span> ${collectedData['q5_timing'] || '[Not specified]'}</div>`;
+            summaryHTML += `<div class="script-line"><span class="script-label">Opening validation:</span> "${collectedData['q2_empathy'] || '...'}"</div>`;
+            summaryHTML += `<div class="script-line"><span class="script-label">Your feelings statement:</span> "${collectedData['q3_i_statement'] || '...'}"</div>`;
+            summaryHTML += `<div class="script-line"><span class="script-label">Primary request:</span> Could you please ${collectedData['q1_change'] || '...'}?</div>`;
+            summaryHTML += `<div class="script-line"><span class="script-label">Compromise solution option:</span> Alternatively, could we try ${collectedData['q4_compromise'] || '...'}?</div>`;
+            summaryHTML += `</div>`;
+            msgDiv.innerHTML = summaryHTML;
+        } else {
+            msgDiv.innerHTML = cleanText;
+        }
+
+        chatBody.appendChild(msgDiv);
+        scrollBottom();
+    }
+
+    function renderUserMessage(text) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('msg', 'user');
+        msgDiv.innerText = text;
+        chatBody.appendChild(msgDiv);
+        scrollBottom();
+    }
+
+    async function processSurvey() {
+        if (currentStep >= surveyScript.length) return;
+
+        const node = surveyScript[currentStep];
+        
+        const wordCount = node.text.split(/\s+/).length;
+        const computedDelay = (wordCount / 320) * 60 * 1000 + 200;
+        const finalDelay = Math.min(Math.max(computedDelay, 450), 1800);
+        
+        showTyping();
+        await sleep(finalDelay);
+        hideTyping();
+
+        renderBotMessage(node);
+
+        if (node.type === "statement" || node.type === "table" || node.type === "summary") {
+            currentStep++;
+            processSurvey();
+        } else if (node.type === "input") {
+            userInput.disabled = false;
+            sendBtn.disabled = false;
+            userInput.placeholder = "Type your response here...";
+            userInput.focus();
+        } else if (node.type === "mcq") {
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+            userInput.placeholder = "Select an option above...";
+        }
+    }
+
+    function commitUserResponse(value) {
+        const currentNode = surveyScript[currentStep];
+        collectedData[currentNode.id] = value;
+
+        renderUserMessage(value);
+        
+        userInput.value = "";
+        userInput.disabled = true;
+        sendBtn.disabled = true;
+        userInput.placeholder = "Waiting for response...";
+
+        currentStep++;
+        processSurvey();
+    }
+
+    function handleTextSubmit() {
+        const text = userInput.value.trim();
+        if (!text) return;
+        commitUserResponse(text);
+    }
+
+    window.handleSelectOption = function(selectedOption) {
+        const activeContainers = document.querySelectorAll('.options-container');
+        if(activeContainers.length > 0) {
+            const lastContainer = activeContainers[activeContainers.length - 1];
+            lastContainer.style.pointerEvents = 'none';
+            lastContainer.style.opacity = '0.6';
+        }
+        commitUserResponse(selectedOption);
+    }
+
+    sendBtn.addEventListener('click', handleTextSubmit);
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleTextSubmit();
+    });
+
+    processSurvey();
+</script>
+
+</body>
+</html>
